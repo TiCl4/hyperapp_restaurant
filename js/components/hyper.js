@@ -18,7 +18,8 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 var actions = exports.actions = {
-  up: up,
+  reviewRight: reviewRight,
+  reviewLeft: reviewLeft,
   intro: intro,
   showMenu: showMenu
 };
@@ -28,6 +29,22 @@ function up(state, actions) {
 }
 
 function showMenu() {}
+
+function reviewRight(state, actions) {
+  return {
+    reviewStatus: {
+      currentReview: state.reviewStatus.currentReview + 1
+    }
+  };
+}
+
+function reviewLeft(state, actions) {
+  return {
+    reviewStatus: {
+      currentReview: state.reviewStatus.currentReview - 1
+    }
+  };
+}
 
 function intro(state, actions) {
   console.log('Just ran my first action');
@@ -112,8 +129,81 @@ function App(_ref) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+var companyInfo = {
+  title: 'Prime Beef Steak Restaurant',
+  phone: '(555)555 5555',
+  location: 'Los Angeles, California'
+};
+
+var specialMenu = [{
+  title: 'Super BBQ Grill No Smoke',
+  description: 'Fried eggs, Steak, baked potato or french fries, side of vegetables',
+  price: 25
+}, {
+  title: 'Chicken Fingers',
+  description: 'Fried eggs, Steak, baked potato or french fries, side of vegetables',
+  price: 15
+}, {
+  title: 'All American Hamburger',
+  description: 'Fried eggs, Steak, baked potato or french fries, side of vegetables',
+  price: 15
+}];
+
+var reviews = [{
+  review: 'For people who worry about the risk, health officials offer common-sense advice: Spend less time on cellphones, use a headset or speaker mode so that the phone is not pressed up against the head and avoid trying to make calls if the signal is weak.',
+  author: 'Joe Bastianich',
+  authorInfo: 'Winner Master Chef 2016',
+  highlight: 'Best Restaurant That I Used To Experience',
+  company: 'The Food Network'
+}, {
+  review: 'For people who worry about the risk, health officials offer common-sense advice: Spend less time on cellphones, use a headset or speaker mode so that the phone is not pressed up against the head and avoid trying to make calls if the signal is weak.',
+  author: 'Joe Bastianich',
+  authorInfo: 'Winner Master Chef 2016',
+  highlight: 'Best Restaurant That I Used To Experience',
+  company: 'LA Best Foods'
+}, {
+  review: 'For people who worry about the risk, health officials offer common-sense advice: Spend less time on cellphones, use a headset or speaker mode so that the phone is not pressed up against the head and avoid trying to make calls if the signal is weak.',
+  author: 'Joe Bastianich',
+  authorInfo: 'Winner Master Chef 2016',
+  highlight: 'Best Restaurant That I Used To Experience',
+  company: 'The New York Times'
+}, {
+  review: 'For people who worry about the risk, health officials offer common-sense advice: Spend less time on cellphones, use a headset or speaker mode so that the phone is not pressed up against the head and avoid trying to make calls if the signal is weak.',
+  author: 'Joe Bastianich',
+  authorInfo: 'Winner Master Chef 2016',
+  highlight: 'Best Restaurant That I Used To Experience',
+  company: 'LA Fitness'
+}, {
+  review: 'For people who worry about the risk, health officials offer common-sense advice: Spend less time on cellphones, use a headset or speaker mode so that the phone is not pressed up against the head and avoid trying to make calls if the signal is weak.',
+  author: 'Joe Bastianich',
+  authorInfo: 'Winner Master Chef 2016',
+  highlight: 'Best Restaurant That I Used To Experience',
+  company: 'Food Heaven'
+}];
+
+var randomQuote = [{
+  author: 'Johny',
+  quote: 'Good Paiting is Like Good Cooking; It Can Be Tasted, But Not Explained.'
+}, {
+  author: 'Ashley',
+  quote: 'Good Paiting is Like Good Cooking; It Can Be Tasted, But Not Explained.'
+}, {
+  author: 'David',
+  quote: 'Good Paiting is Like Good Cooking; It Can Be Tasted, But Not Explained.'
+}, {
+  author: 'Caesars',
+  quote: 'Good Paiting is Like Good Cooking; It Can Be Tasted, But Not Explained.'
+}];
+
 var globalState = exports.globalState = {
-  count: 0
+  count: 0,
+  companyInfo: companyInfo,
+  specialMenu: specialMenu,
+  randomQuote: randomQuote,
+  reviews: reviews,
+  reviewStatus: {
+    currentReview: 0
+  }
 };
 
 /***/ }),
@@ -160,12 +250,7 @@ function ContactUs(_ref) {
           (0, _hyperapp.h)(
             "div",
             { "class": "city" },
-            "Los Angeles, ",
-            (0, _hyperapp.h)(
-              "span",
-              null,
-              "California"
-            )
+            state.companyInfo.location
           ),
           (0, _hyperapp.h)(
             "h6",
@@ -535,6 +620,67 @@ function Reviews(_ref) {
   var state = _ref.state,
       actions = _ref.actions;
 
+
+  var currentReview = function currentReview() {
+    return (0, _hyperapp.h)(
+      "div",
+      null,
+      (0, _hyperapp.h)(
+        "h5",
+        { "class": "comp-title" },
+        "Reviews"
+      ),
+      (0, _hyperapp.h)(
+        "h2",
+        null,
+        state.reviews[state.reviewStatus.currentReview].company
+      ),
+      (0, _hyperapp.h)(
+        "h4",
+        null,
+        state.reviews[state.reviewStatus.currentReview].highlight
+      ),
+      (0, _hyperapp.h)(
+        "p",
+        null,
+        state.reviews[state.reviewStatus.currentReview].review
+      ),
+      (0, _hyperapp.h)(
+        "div",
+        { "class": "author" },
+        (0, _hyperapp.h)(
+          "strong",
+          null,
+          state.reviews[state.reviewStatus.currentReview].author
+        ),
+        " - ",
+        (0, _hyperapp.h)(
+          "em",
+          null,
+          state.reviews[state.reviewStatus.currentReview].authorInfo
+        )
+      )
+    );
+  };
+
+  var rightClickBtn = function rightClickBtn() {
+    if (state.reviewStatus.currentReview == state.reviews.length - 1) {
+      state.reviewStatus.currentReview = 0;
+      actions.reviewRight();
+    } else {
+      actions.reviewRight();
+    }
+  };
+
+  var leftClickBtn = function leftClickBtn() {
+    if (state.reviewStatus.currentReview > 0) {
+      actions.reviewLeft();
+    } else {
+      state.reviewStatus.currentReview = state.reviews.length;
+      actions.reviewLeft();
+    }
+  };
+
   return (0, _hyperapp.h)(
     "section",
     { "class": "Reviews" },
@@ -559,42 +705,12 @@ function Reviews(_ref) {
           (0, _hyperapp.h)(
             "div",
             { "class": "info" },
-            (0, _hyperapp.h)(
-              "h5",
-              { "class": "comp-title" },
-              "Reviews"
-            ),
-            (0, _hyperapp.h)(
-              "h2",
-              null,
-              "The food masters say about us"
-            ),
-            (0, _hyperapp.h)(
-              "h4",
-              null,
-              "Best restaurant that I used to experience"
-            ),
-            (0, _hyperapp.h)(
-              "p",
-              null,
-              "For people who worry about the risk, health officials offer common-sense advice: Spend less time on cellphones, use a headset or speaker mode so that the phone is not pressed up against the head and avoid trying to make calls if the signal is weak."
-            ),
-            (0, _hyperapp.h)(
-              "div",
-              { "class": "author" },
-              (0, _hyperapp.h)(
-                "strong",
-                null,
-                "Joe Bastianich"
-              ),
-              " - Winner Master Chef 2016"
-            ),
+            currentReview(),
             (0, _hyperapp.h)(
               "div",
               { "class": "arrows" },
-              (0, _hyperapp.h)("i", { "class": "fa fa-arrow-left", style: "font-size:24px" }),
-              (0, _hyperapp.h)("i", null),
-              (0, _hyperapp.h)("i", { "class": "fa fa-arrow-right", style: "font-size:24px" })
+              (0, _hyperapp.h)("i", { onclick: leftClickBtn, "class": "fa fa-arrow-left " + (state.reviewStatus.currentReview > 0 ? 'ready' : ''), style: "font-size:24px" }),
+              (0, _hyperapp.h)("i", { onclick: rightClickBtn, "class": "fa fa-arrow-right " + (state.reviewStatus.currentReview == state.reviews.length - 1 ? '' : 'ready'), style: "font-size:24px" })
             )
           )
         )
@@ -623,6 +739,40 @@ function SpecialMenu(_ref) {
   var state = _ref.state,
       actions = _ref.actions;
 
+
+  var loopMenu = function loopMenu() {
+    return state.specialMenu.map(function (item) {
+      return (0, _hyperapp.h)(
+        "div",
+        { "class": "col-md-4" },
+        (0, _hyperapp.h)(
+          "div",
+          { "class": "box" },
+          (0, _hyperapp.h)(
+            "div",
+            { "class": "box-img" },
+            (0, _hyperapp.h)(
+              "div",
+              { "class": "price-circle" },
+              "$",
+              item.price
+            )
+          ),
+          (0, _hyperapp.h)(
+            "span",
+            { "class": "title" },
+            item.title
+          ),
+          (0, _hyperapp.h)(
+            "p",
+            { "class": "details" },
+            item.description
+          )
+        )
+      );
+    });
+  };
+
   return (0, _hyperapp.h)(
     "section",
     { "class": "SpecialMenu textureBG" },
@@ -642,87 +792,7 @@ function SpecialMenu(_ref) {
       (0, _hyperapp.h)(
         "div",
         { "class": "row boxes" },
-        (0, _hyperapp.h)(
-          "div",
-          { "class": "col-md-4" },
-          (0, _hyperapp.h)(
-            "div",
-            { "class": "box" },
-            (0, _hyperapp.h)(
-              "div",
-              { "class": "box-img" },
-              (0, _hyperapp.h)(
-                "div",
-                { "class": "price-circle" },
-                "$25"
-              )
-            ),
-            (0, _hyperapp.h)(
-              "span",
-              { "class": "title" },
-              "Super BBQ Grill NO Smoke"
-            ),
-            (0, _hyperapp.h)(
-              "p",
-              { "class": "details" },
-              "Fried eggs, Steak, baked potato or french fries, side of vegetables"
-            )
-          )
-        ),
-        (0, _hyperapp.h)(
-          "div",
-          { "class": "col-md-4" },
-          (0, _hyperapp.h)(
-            "div",
-            { "class": "box" },
-            (0, _hyperapp.h)(
-              "div",
-              { "class": "box-img" },
-              (0, _hyperapp.h)(
-                "div",
-                { "class": "price-circle" },
-                "$25"
-              )
-            ),
-            (0, _hyperapp.h)(
-              "span",
-              { "class": "title" },
-              "Super BBQ Grill NO Smoke"
-            ),
-            (0, _hyperapp.h)(
-              "p",
-              { "class": "details" },
-              "Fried eggs, Steak, baked potato or french fries, side of vegetables"
-            )
-          )
-        ),
-        (0, _hyperapp.h)(
-          "div",
-          { "class": "col-md-4" },
-          (0, _hyperapp.h)(
-            "div",
-            { "class": "box" },
-            (0, _hyperapp.h)(
-              "div",
-              { "class": "box-img" },
-              (0, _hyperapp.h)(
-                "div",
-                { "class": "price-circle" },
-                "$25"
-              )
-            ),
-            (0, _hyperapp.h)(
-              "span",
-              { "class": "title" },
-              "Super BBQ Grill NO Smoke"
-            ),
-            (0, _hyperapp.h)(
-              "p",
-              { "class": "details" },
-              "Fried eggs, Steak, baked potato or french fries, side of vegetables"
-            )
-          )
-        )
+        loopMenu()
       ),
       (0, _hyperapp.h)(
         "a",
@@ -770,9 +840,7 @@ function TopImg(_ref) {
         (0, _hyperapp.h)(
           "h1",
           null,
-          "Prime Beef Steak",
-          (0, _hyperapp.h)("br", null),
-          "Restaurant"
+          state.companyInfo.title
         )
       ),
       (0, _hyperapp.h)(
@@ -840,7 +908,7 @@ var _App2 = _interopRequireDefault(_App);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 (0, _hyperapp.app)({
-  state: { globalState: _globalState.globalState },
+  state: _globalState.globalState,
   view: function view(state, actions) {
     return (0, _hyperapp.h)(_App2.default, { state: state, actions: actions });
   },
