@@ -550,7 +550,7 @@ function Reviews(_ref) {
           (0, _hyperapp.h)(
             "div",
             { "class": "img" },
-            (0, _hyperapp.h)("img", { src: "/img/chef.jpg" })
+            (0, _hyperapp.h)("img", { src: "./img/chef.jpg" })
           )
         ),
         (0, _hyperapp.h)(
